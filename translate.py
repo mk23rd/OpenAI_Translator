@@ -1,31 +1,31 @@
-#make chatbot with GPT-4 Turbo api key
-
 import openai
+from google.cloud import translate_v2 as translate
 
-# Set your OpenAI API key
-openai.api_key = 'your api key'
-
-def chat_with_gpt4_turbo(prompt):
+def openai_translate(text, target_language):
+    openai.api_key = 'YOUR_OPENAI_API_KEY_HERE'  # Replace with your OpenAI API key
     response = openai.Completion.create(
-        engine="text-gpt4-turbo",  # Use the GPT-4 Turbo engine
-        prompt=prompt,
-        max_tokens=50  # Adjust as needed
+        engine="davinci",
+        prompt="Translate the following English text into " + target_language + ":\n\"" + text + "\"",
+        max_tokens=50
     )
     return response.choices[0].text.strip()
 
-def main():
-    print("Welcome to the GPT-4 Turbo Chatbot!")
-    print("You can start chatting with the bot. Type 'exit' to quit.")
+def google_translate(text, target_language):
+    translate_client = translate.Client()
+    result = translate_client.translate(text, target_language=target_language)
+    return result['translatedText']
 
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() == 'exit':
-            print("Chatbot: Goodbye!")
-            break
-        
-        # Let GPT-4 Turbo generate a response based on user input
-        response = chat_with_gpt4_turbo(user_input)
-        print("Chatbot:", response)
+def main():
+    text = input("Enter text to translate: ")
+    target_language = input("Enter target language code (e.g., 'fr' for French): ")
+    
+    # Translate using OpenAI
+    intermediate_translation = openai_translate(text, target_language)
+    
+    # Translate the intermediate translation to the final target language using Google Translate
+    final_translation = google_translate(intermediate_translation, target_language)
+    
+    print("Translated text:", final_translation)
 
 if __name__ == "__main__":
     main()
