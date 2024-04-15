@@ -2,7 +2,7 @@ import openai
 from google.cloud import translate_v2 as translate
 
 def openai_translate(text, target_language):
-    openai.api_key = 'YOUR_OPENAI_API_KEY_HERE'  # Replace with your OpenAI API key
+    openai.api_key = 'Api Key'  # Replace with your OpenAI API key
     response = openai.Completion.create(
         engine="davinci",
         prompt="Translate the following English text into " + target_language + ":\n\"" + text + "\"",
